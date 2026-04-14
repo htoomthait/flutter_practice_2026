@@ -17,7 +17,7 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
 
   FutureOr<void> postsInitialFetchEvent(PostsInitialFetchEvent event, Emitter<PostsState> emit) {
 
-    
+
 
   }
 }
