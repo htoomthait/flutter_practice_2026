@@ -35,7 +35,18 @@ class _PostPageState extends State<PostPage> {
         bloc: _postsBloc,
         listenWhen: (previous, current) => current is PostsActionState,
         buildWhen: (previous, current) => current is !PostsActionState,
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is PostAdditionSuccessState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Post added successfully")),
+            );
+          }
+          else if (state is PostAdditionErrorState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Failed to add post")),
+            );
+          }
+        },
         builder: (context, state){
           log("Post UI current state: ${state.runtimeType}");
           switch (state.runtimeType) {
@@ -61,6 +72,9 @@ class _PostPageState extends State<PostPage> {
             case const (PostFetchErrorState):
               return Text("Failed to fetch posts");
             case const (PostsFetchingLoadingState):
+              return Center(child: CircularProgressIndicator());
+
+            case const (PostAdditionLoadingState):
               return Center(child: CircularProgressIndicator());
             default:
               return SizedBox(height: 10.0,);
