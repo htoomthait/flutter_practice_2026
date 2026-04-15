@@ -1,4 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/posts_bloc.dart';
 
 class PostPage extends StatefulWidget {
   const PostPage({super.key});
@@ -8,6 +12,16 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
+  final PostsBloc _postsBloc = PostsBloc();
+
+
+  @override
+  void initState() {
+    _postsBloc.add(PostsInitialFetchEvent());
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,6 +31,45 @@ class _PostPageState extends State<PostPage> {
         backgroundColor: Theme.of(context).primaryColor,
 
       ),
+      body: BlocConsumer<PostsBloc, PostsState>(
+        bloc: _postsBloc,
+        listenWhen: (previous, current) => current is PostsActionState,
+        buildWhen: (previous, current) => current is !PostsActionState,
+        listener: (context, state) {},
+        builder: (context, state){
+          log("Post UI current state: ${state.runtimeType}");
+          switch (state.runtimeType) {
+            case const (PostFetchSuccessfulState):
+              final successState = state as PostFetchSuccessfulState;
+              return ListView.builder(
+                  itemCount: successState.posts.length,
+                  itemBuilder: (context, index){
+                    return Container(
+                      padding: const EdgeInsets.all(16),
+                      margin: const EdgeInsets.all(16),
+                      color: Colors.grey.shade200,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text("Title: ${successState.posts[index].title}"),
+                            Text("Body: ${successState.posts[index].body}")
+                          ]
+                      ),
+                    );
+                  }
+              );
+            case const (PostFetchErrorState):
+              return Text("Failed to fetch posts");
+            case const (PostsFetchingLoadingState):
+              return Center(child: CircularProgressIndicator());
+            default:
+              return SizedBox(height: 10.0,);
+          }
+
+
+
+        }
+      )
     );
   }
 }
