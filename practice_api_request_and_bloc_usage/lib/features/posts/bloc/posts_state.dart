@@ -23,3 +23,10 @@ class PostFetchErrorState extends PostsState {}
 
 class PostsFetchingLoadingState extends PostsState {}
 
+class PostAdditionSuccessState extends PostsActionState {}
+
+class PostAdditionErrorState extends PostsActionState {}
+
+class PostAdditionLoadingState extends PostsActionState {}
+
+

@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 import 'package:practice_api_request_and_bloc_usage/features/posts/models/post_data_ui_model.dart';
 
+import '../repo/posts_repo.dart';
+
 part 'posts_event.dart';
 
 part 'posts_state.dart';
@@ -22,36 +24,42 @@ class PostsBloc extends Bloc<PostsEvent, PostsState> {
     Emitter<PostsState> emit,
   ) async {
     emit(PostsFetchingLoadingState());
-    var client = http.Client();
-    List<PostDataUiModel> posts = [];
+
+
 
     try {
-      var response = await client.get(
-        Uri.parse('https://jsonplaceholder.typicode.com/posts'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-      );
-
-      List result = jsonDecode(response.body);
-
-
-      for(int i = 0; i < result.length; i++){
-        PostDataUiModel post = PostDataUiModel.fromMap(result[i]);
-        posts.add(post);
-      }
-
+      List<PostDataUiModel> posts = await PostsRepo.fetchPost();
 
 
       emit(PostFetchSuccessfulState(posts: posts));
-      client.close();
+
 
     } catch(e) {
-      log(e.toString());
-      client.close();
+
       emit(PostFetchErrorState());
     }
   }
 
-  FutureOr<void> postAddEvent(PostAddEvent event, Emitter<PostsState> emit) {}
+  FutureOr<void> postAddEvent(PostAddEvent event, Emitter<PostsState> emit) async {
+    emit(PostAdditionLoadingState());
+
+    try{
+
+      bool success = await PostsRepo.addPost(PostDataUiModel(userId: 1, id: 101, title: "Test Title", body: "Test Body"));
+
+      if(success){
+        print("Post added successfully");
+        emit(PostAdditionSuccessState());
+      }
+      else{
+        print("Failed to add post");
+        emit(PostAdditionErrorState());
+      }
+
+    }catch(e){
+      print("Failed to add post");
+      emit(PostFetchErrorState());
+    }
+
+  }
 }
