@@ -15,7 +15,7 @@ class BarChart extends StatelessWidget {
     });
 
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         children: <Widget>[
           Text(
@@ -32,20 +32,22 @@ class BarChart extends StatelessWidget {
             children: <Widget>[
               IconButton(
                 icon: Icon(Icons.arrow_back),
-                iconSize: 30.0,
+                iconSize: 27.0,
                 onPressed: () {},
               ),
-              Text(
-                "Nov 10, 2019 - Nov 16,  2019",
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 1.2,
+              Expanded(
+                child: Text(
+                  "Nov 10, 2019 - Nov 16,  2019",
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1.2,
+                  ),
                 ),
               ),
               IconButton(
                 icon: Icon(Icons.arrow_forward),
-                iconSize: 30.0,
+                iconSize: 27.0,
                 onPressed: () {},
               ),
             ],
@@ -61,7 +63,7 @@ class BarChart extends StatelessWidget {
               Bar(label: 'We', amountSpent: expenses[3], mostExpensive: mostExpensive),
               Bar(label: 'Th', amountSpent: expenses[4], mostExpensive: mostExpensive),
               Bar(label: 'Fr', amountSpent: expenses[5], mostExpensive: mostExpensive),
-              Bar(label: 'Sa', amountSpent: expenses[6], mostExpensive: mostExpensive),
+              Expanded(child: Bar(label: 'Sa', amountSpent: expenses[6], mostExpensive: mostExpensive)),
 
             ],
           )
