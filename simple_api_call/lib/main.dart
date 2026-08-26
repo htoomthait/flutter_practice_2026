@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simple_api_call/widgets/post_card.dart';
 
 import 'models/post.dart';
 import 'services/post_service.dart';
@@ -73,6 +74,7 @@ class _PostListScreenState extends State<PostListScreen> {
           }
 
           final posts = snapshot.data!;
+          posts.sort((a, b) => b.id.compareTo(a.id)); // sorting by id desc
 
           return ListView.builder(
               itemCount: posts.length,
@@ -80,19 +82,7 @@ class _PostListScreenState extends State<PostListScreen> {
                 final post = posts[index];
 
 
-                return Card(
-                  margin: const  EdgeInsets.all(8),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      child: Text('${post.id}')
-                    ),
-                    title: Text(
-                      post.title,
-                      style: const TextStyle(fontWeight: FontWeight.bold)
-                    ),
-                    subtitle: Text(post.body),
-                  ),
-                );
+                return PostCard(post: post);
 
               }
           );
