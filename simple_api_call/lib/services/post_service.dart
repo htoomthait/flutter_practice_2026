@@ -26,4 +26,25 @@ class PostService {
 
   }
 
+  Future<Post> createPost(Post post) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/posts'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(post.toJson())
+    );
+
+
+    if(response.statusCode == 201){
+      return Post.fromJson(jsonDecode(response.body));
+    }
+    else{
+      throw Exception('Failed to create post');
+    }
+
+
+
+  }
+
 }

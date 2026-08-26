@@ -1,7 +1,7 @@
 
 class Post {
-   final int userId;
-   final int id;
+   final int? userId;
+   final int? id;
    final String title;
    final String body;
 
@@ -16,6 +16,14 @@ class Post {
        title: json['title'],
        body: json['body']
      );
+   }
+
+   Map<String, dynamic> toJson() {
+     return {
+        'userId': userId,
+        'title': title,
+        'body': body
+     };
    }
 
 

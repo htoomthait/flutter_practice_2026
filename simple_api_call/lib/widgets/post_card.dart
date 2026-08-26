@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simple_api_call/screens/post_detail_screen.dart';
 
 import '../models/post.dart';
 
@@ -12,6 +13,12 @@ class PostCard extends StatelessWidget{
     return Card(
       margin: const  EdgeInsets.all(8),
       child: ListTile(
+        onTap: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PostDetailScreen(post: post))
+          );
+        },
         leading: CircleAvatar(
             child: Text('${post.id}')
         ),
@@ -19,7 +26,7 @@ class PostCard extends StatelessWidget{
             post.title,
             style: const TextStyle(fontWeight: FontWeight.bold)
         ),
-        subtitle: Text(post.body),
+        subtitle: Text(post.body, maxLines: 2, overflow: TextOverflow.ellipsis,),
       ),
     );
   }
