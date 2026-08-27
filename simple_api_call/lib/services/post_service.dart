@@ -47,4 +47,18 @@ class PostService {
 
   }
 
+  Future<bool> deletePost(int postId) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/posts/$postId')
+    );
+
+    if(response.statusCode == 200){
+      return true;
+    }
+    else{
+      print("Post Delete fail: ${response.body}");
+      throw Exception("Fail to delete post with Id: $postId");
+    }
+  }
+
 }
